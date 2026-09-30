@@ -1,0 +1,1154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Java Studio Pro.ARnc</title>
+
+<style>
+*{
+    box-sizing:border-box;
+}
+
+:root{
+    --bg:#070d18;
+    --bg2:#0b1424;
+    --panel:#0d192b;
+    --panel2:#101f34;
+    --editor:#081321;
+    --border:#213550;
+    --text:#edf4ff;
+    --muted:#8297b1;
+    --primary:#7c5cff;
+    --cyan:#00d9ff;
+    --green:#26e58c;
+    --red:#ff5575;
+    --yellow:#ffd166;
+    --shadow:0 20px 70px rgba(0,0,0,.35);
+}
+
+body.light{
+    --bg:#eef3f9;
+    --bg2:#f6f8fc;
+    --panel:#ffffff;
+    --panel2:#f2f6fb;
+    --editor:#f8fafc;
+    --border:#d7e0eb;
+    --text:#152238;
+    --muted:#65758b;
+}
+
+html,
+body{
+    margin:0;
+    min-height:100%;
+}
+
+body{
+    font-family:
+        Inter,
+        Segoe UI,
+        Roboto,
+        Arial,
+        sans-serif;
+
+    background:
+        radial-gradient(
+            circle at 10% 5%,
+            rgba(124,92,255,.18),
+            transparent 28%
+        ),
+        radial-gradient(
+            circle at 90% 15%,
+            rgba(0,217,255,.12),
+            transparent 28%
+        ),
+        var(--bg);
+
+    color:var(--text);
+}
+
+button,
+select{
+    font:inherit;
+}
+
+button{
+    cursor:pointer;
+}
+
+.app{
+    min-height:100vh;
+    display:flex;
+    flex-direction:column;
+}
+
+/* ================= HEADER ================= */
+
+.topbar{
+    height:72px;
+    padding:0 22px;
+
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:15px;
+
+    position:sticky;
+    top:0;
+    z-index:100;
+
+    background:rgba(7,13,24,.78);
+    backdrop-filter:blur(18px);
+
+    border-bottom:1px solid var(--border);
+}
+
+body.light .topbar{
+    background:rgba(255,255,255,.82);
+}
+
+.brand{
+    display:flex;
+    align-items:center;
+    gap:12px;
+}
+
+.logo{
+    width:43px;
+    height:43px;
+
+    display:grid;
+    place-items:center;
+
+    border-radius:13px;
+
+    font-weight:900;
+    font-size:21px;
+
+    color:white;
+
+    background:
+        linear-gradient(
+            135deg,
+            var(--primary),
+            var(--cyan)
+        );
+
+    box-shadow:
+        0 10px 30px
+        rgba(124,92,255,.35);
+}
+
+.brand h1{
+    margin:0;
+    font-size:19px;
+}
+
+.brand small{
+    color:var(--muted);
+    font-size:11px;
+}
+
+.top-actions{
+    display:flex;
+    gap:7px;
+    align-items:center;
+    flex-wrap:wrap;
+}
+
+/* ================= BUTTONS ================= */
+
+.btn{
+    border:1px solid var(--border);
+
+    background:var(--panel2);
+    color:var(--text);
+
+    padding:9px 12px;
+
+    border-radius:9px;
+
+    transition:
+        transform .15s,
+        border-color .15s,
+        background .15s;
+}
+
+.btn:hover{
+    transform:translateY(-1px);
+    border-color:var(--primary);
+}
+
+.run-btn{
+    border:0;
+
+    padding:10px 17px;
+
+    color:white;
+    font-weight:800;
+
+    border-radius:10px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #7655ff,
+            #00bfe9
+        );
+
+    box-shadow:
+        0 8px 25px
+        rgba(92,85,255,.3);
+}
+
+.run-btn:hover{
+    transform:translateY(-2px);
+}
+
+/* ================= WORKSPACE ================= */
+
+.workspace{
+    width:100%;
+    padding:18px;
+
+    display:grid;
+
+    grid-template-columns:
+        minmax(240px,.55fr)
+        minmax(0,1.45fr)
+        minmax(330px,.8fr);
+
+    gap:18px;
+
+    flex:1;
+}
+
+.card{
+    min-width:0;
+
+    background:
+        rgba(13,25,43,.88);
+
+    border:1px solid var(--border);
+
+    border-radius:17px;
+
+    box-shadow:var(--shadow);
+
+    overflow:hidden;
+}
+
+body.light .card{
+    background:rgba(255,255,255,.9);
+}
+
+.card-header{
+    min-height:57px;
+
+    padding:0 14px;
+
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+
+    gap:10px;
+
+    background:
+        rgba(16,31,52,.68);
+
+    border-bottom:1px solid var(--border);
+}
+
+.header-title{
+    display:flex;
+    align-items:center;
+    gap:9px;
+
+    font-weight:800;
+}
+
+.status-dot{
+    width:9px;
+    height:9px;
+
+    border-radius:50%;
+
+    background:var(--green);
+
+    box-shadow:
+        0 0 13px
+        var(--green);
+}
+
+.header-tools{
+    display:flex;
+    gap:6px;
+    flex-wrap:wrap;
+}
+
+/* ================= EDITOR ================= */
+
+.editor-wrap{
+    height:calc(100vh - 180px);
+    min-height:500px;
+
+    display:grid;
+
+    grid-template-columns:56px minmax(0,1fr);
+
+    background:var(--editor);
+}
+
+.line-numbers{
+    overflow:hidden;
+
+    padding:
+        16px
+        12px
+        16px
+        0;
+
+    text-align:right;
+
+    color:#50657e;
+
+    background:
+        rgba(3,10,19,.35);
+
+    border-right:1px solid var(--border);
+
+    font:
+        14px/1.65
+        Consolas,
+        "Courier New",
+        monospace;
+
+    user-select:none;
+}
+
+.editor-area{
+    min-width:0;
+    min-height:0;
+}
+
+#codeInput{
+    width:100%;
+    height:100%;
+
+    resize:none;
+
+    border:0;
+    outline:0;
+
+    padding:16px 18px;
+
+    background:var(--editor);
+    color:var(--text);
+
+    font:
+        14px/1.65
+        Consolas,
+        "Courier New",
+        monospace;
+
+    tab-size:4;
+
+    white-space:pre;
+
+    overflow:auto;
+}
+
+#codeInput::selection{
+    background:
+        rgba(124,92,255,.35);
+}
+
+/* ================= TOOLBAR ================= */
+
+.toolbar{
+    min-height:53px;
+
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+
+    gap:10px;
+
+    padding:8px 12px;
+
+    background:var(--panel2);
+
+    border-top:1px solid var(--border);
+}
+
+.toolbar-left,
+.toolbar-right{
+    display:flex;
+    align-items:center;
+    gap:6px;
+    flex-wrap:wrap;
+}
+
+select{
+    padding:8px 10px;
+
+    color:var(--text);
+    background:var(--panel2);
+
+    border:1px solid var(--border);
+
+    border-radius:9px;
+
+    outline:none;
+}
+
+/* ================= RIGHT ================= */
+
+.right{
+    display:contents;
+}
+
+.editor-card{
+    grid-column:2;
+    grid-row:1;
+}
+
+.right > .card:first-child{
+    grid-column:3;
+    grid-row:1;
+    min-width:0;
+    min-height:0;
+}
+
+.right > .card:last-child{
+    grid-column:1;
+    grid-row:1;
+    min-width:0;
+    min-height:0;
+}
+
+/* ================= CONSOLE ================= */
+
+.console{
+    height:calc(100% - 57px);
+
+    overflow:auto;
+
+    padding:15px;
+
+    background:#060d16;
+
+    color:#dce8f8;
+
+    font:
+        13px/1.7
+        Consolas,
+        "Courier New",
+        monospace;
+}
+
+.console-line{
+    margin-bottom:6px;
+
+    white-space:pre-wrap;
+    word-break:break-word;
+}
+
+.console-line.info{
+    color:var(--cyan);
+}
+
+.console-line.success{
+    color:var(--green);
+}
+
+.console-line.error{
+    color:var(--red);
+}
+
+.console-line.warning{
+    color:var(--yellow);
+}
+
+.console-line.output{
+    color:#e5eefb;
+}
+
+.console-prompt{
+    color:var(--green);
+}
+
+/* ================= EXAMPLES ================= */
+
+.examples{
+    height:calc(100% - 57px);
+
+    padding:14px;
+
+    overflow:auto;
+}
+
+.example{
+    display:block;
+
+    width:100%;
+
+    margin-bottom:9px;
+
+    padding:13px;
+
+    text-align:left;
+
+    color:var(--text);
+
+    background:
+        rgba(10,24,41,.75);
+
+    border:1px solid var(--border);
+
+    border-radius:11px;
+
+    transition:.18s;
+}
+
+body.light .example{
+    background:#f6f9fd;
+}
+
+.example:hover{
+    transform:translateX(3px);
+
+    border-color:var(--primary);
+
+    background:
+        rgba(124,92,255,.08);
+}
+
+.example strong{
+    display:block;
+    margin-bottom:4px;
+}
+
+.example small{
+    color:var(--muted);
+}
+
+/* ================= FOOTER ================= */
+
+footer{
+    padding:18px 22px;
+
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+
+    gap:12px;
+
+    color:var(--muted);
+
+    font-size:12px;
+
+    border-top:1px solid var(--border);
+}
+
+/* ================= FULLSCREEN ================= */
+
+.editor-card.fullscreen-editor{
+    position:fixed;
+    inset:0;
+
+    z-index:9999;
+
+    border-radius:0;
+
+    width:100vw;
+    height:100vh;
+}
+
+.editor-card.fullscreen-editor .editor-wrap{
+    height:calc(100vh - 110px);
+}
+
+/* ================= MOBILE ================= */
+
+@media(max-width:950px){
+
+    .workspace{
+        grid-template-columns:1fr;
+        gap:18px;
+    }
+
+    .editor-card,
+    .right > .card:first-child,
+    .right > .card:last-child{
+        grid-column:1;
+        grid-row:auto;
+    }
+
+    .editor-wrap{
+        height:600px;
+    }
+
+    .right{
+        grid-template-rows:360px 360px;
+    }
+}
+
+@media(max-width:600px){
+
+    .topbar{
+        height:auto;
+        padding:11px;
+        flex-wrap:wrap;
+    }
+
+    .top-actions{
+        width:100%;
+        justify-content:flex-end;
+    }
+
+    .workspace{
+        padding:9px;
+        gap:10px;
+    }
+
+    .toolbar{
+        align-items:flex-start;
+        flex-direction:column;
+    }
+
+    footer{
+        flex-direction:column;
+        align-items:flex-start;
+    }
+
+    .editor-wrap{
+        grid-template-columns:45px 1fr;
+        height:530px;
+        min-height:400px;
+    }
+
+    #codeInput{
+        padding-left:12px;
+    }
+}
+
+/* ================= ENHANCED FEATURES ================= */
+.feature-menu{position:relative}
+.feature-panel{position:absolute;right:0;top:44px;width:290px;z-index:1200;display:none;padding:10px;background:var(--panel);border:1px solid var(--border);border-radius:13px;box-shadow:var(--shadow)}
+.feature-panel.open{display:block}
+.feature-panel button{width:100%;text-align:left;margin:3px 0}
+.feature-group{padding:7px 5px;color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:.08em}
+.stats-bar{display:flex;gap:12px;flex-wrap:wrap;color:var(--muted);font-size:11px}
+.stats-bar b{color:var(--text)}
+.modal-backdrop{position:fixed;inset:0;background:rgba(0,0,0,.58);backdrop-filter:blur(5px);display:none;align-items:center;justify-content:center;z-index:3000;padding:18px}
+.modal-backdrop.open{display:flex}
+.modal{width:min(760px,100%);max-height:88vh;overflow:auto;background:var(--panel);border:1px solid var(--border);border-radius:18px;box-shadow:var(--shadow);padding:20px}
+.modal h2{margin:0 0 8px}.modal p,.modal li{color:var(--muted);line-height:1.65}
+.modal-header{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.modal-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.modal input,.modal textarea{width:100%;padding:10px;border:1px solid var(--border);border-radius:9px;background:var(--editor);color:var(--text);outline:none}
+.modal textarea{min-height:150px;resize:vertical}
+.modal-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:12px;flex-wrap:wrap}
+.help-table{width:100%;border-collapse:collapse;margin-top:10px}
+.help-table td,.help-table th{padding:9px;border-bottom:1px solid var(--border);text-align:left}
+.help-table td{color:var(--muted)}
+#codeInput.wrap{white-space:pre-wrap;overflow-wrap:anywhere}
+.console.fullscreen-console{position:fixed;inset:0;height:100vh!important;z-index:2900;padding:25px;border:0;font-size:15px}
+.footer-content{max-width:1400px;margin:auto;width:100%}
+.footer-top{display:flex;justify-content:space-between;gap:18px;align-items:flex-start;flex-wrap:wrap}
+.footer-actions{display:flex;gap:7px;flex-wrap:wrap}
+.footer-details{display:grid;grid-template-columns:1fr 1fr;gap:22px;margin-top:12px}
+.footer-details article{padding:16px;border:1px solid var(--border);border-radius:14px;background:rgba(16,31,52,.35)}
+.footer-details h3{color:var(--text);margin-top:0}
+.footer-details p{color:var(--muted);line-height:1.72;font-size:12px}
+@media(max-width:700px){.modal-grid,.footer-details{grid-template-columns:1fr}.feature-panel{right:auto;left:0}}
+
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+<!-- ================= HEADER ================= -->
+
+<header class="topbar">
+
+    <div class="brand">
+
+        <div class="logo">J</div>
+
+        <div>
+            <h1>Java Studio Pro</h1>
+            <small>Advanced Java Code Playground</small>
+        </div>
+
+    </div>
+
+    <div class="top-actions">
+
+        <button
+            class="btn"
+            id="newBtn">
+            ＋ New
+        </button>
+
+        <button
+            class="btn"
+            id="saveBtn">
+            ↓ Save
+        </button>
+
+        <button
+            class="btn"
+            id="themeBtn">
+            ☀️
+        </button>
+
+        <button class="btn" id="historyBtn">↺ History</button>
+        <div class="feature-menu">
+            <button class="btn" id="featuresBtn">⚙ Tools</button>
+            <div class="feature-panel" id="featurePanel">
+                <div class="feature-group">Editor</div>
+                <button class="btn" id="findBtn">🔎 Find / Replace</button>
+                <button class="btn" id="wrapBtn">↔ Toggle Word Wrap</button>
+                <button class="btn" id="commentBtn">💬 Toggle Comment</button>
+                <button class="btn" id="duplicateBtn">⧉ Duplicate Line</button>
+                <button class="btn" id="indentBtn">⇥ Indent Selection</button>
+                <button class="btn" id="unindentBtn">⇤ Unindent Selection</button>
+                <div class="feature-group">Workspace</div>
+                <button class="btn" id="statsBtn">📊 Code Statistics</button>
+                <button class="btn" id="shortcutsBtn">⌨ Keyboard Shortcuts</button>
+                <button class="btn" id="downloadConsoleBtn">⬇ Download Console</button>
+                <button class="btn" id="autoSaveBtn">💾 Auto Save: ON</button>
+            </div>
+        </div>
+        <button class="btn" id="livePreviewBtn" title="Automatically update preview while typing">⚡ Live Preview: ON</button>
+        <button class="run-btn" id="runBtn">▶ Run Code</button>
+
+    </div>
+
+</header>
+
+
+<!-- ================= MAIN ================= -->
+
+<main class="workspace">
+
+
+<!-- ================= EDITOR ================= -->
+
+<section class="card editor-card" id="editorCard">
+
+    <div class="card-header">
+
+        <div class="header-title">
+            <span class="status-dot"></span>
+            <span id="fileName">Main.java</span>
+        </div>
+
+        <div class="header-tools">
+
+            <button
+                class="btn"
+                id="copyBtn">
+                Copy
+            </button>
+
+            <button
+                class="btn"
+                id="resetBtn">
+                Reset
+            </button>
+
+            <button class="btn" id="renameBtn">✎ Rename</button>
+            <button class="btn" id="fullscreenBtn">⛶</button>
+
+        </div>
+
+    </div>
+
+
+    <div class="editor-wrap">
+
+        <div
+            class="line-numbers"
+            id="lineNumbers">
+        </div>
+
+        <div class="editor-area">
+
+            <textarea
+                id="codeInput"
+                spellcheck="false"
+                autocomplete="off"
+                autocorrect="off"
+                autocapitalize="off"></textarea>
+
+        </div>
+
+    </div>
+
+
+    <div class="toolbar">
+
+        <div class="toolbar-left">
+
+            <button
+                class="btn"
+                id="tabBtn">
+                Tab
+            </button>
+
+            <button
+                class="btn"
+                id="formatBtn">
+                Format
+            </button>
+
+            <button
+                class="btn"
+                id="clearEditorBtn">
+                Clear
+            </button>
+
+            <select id="fontSize">
+
+                <option value="13">13px</option>
+                <option value="14" selected>14px</option>
+                <option value="15">15px</option>
+                <option value="16">16px</option>
+                <option value="18">18px</option>
+
+            </select>
+
+        </div>
+
+
+        <div class="toolbar-right">
+
+            <div class="stats-bar">
+                <span>Java 17 • UTF-8</span>
+                <span>Lines: <b id="lineCount">0</b></span>
+                <span>Chars: <b id="charCount">0</b></span>
+                <span>Words: <b id="wordCount">0</b></span>
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- ================= RIGHT ================= -->
+
+<section class="right">
+
+
+<!-- CONSOLE -->
+
+<div class="card">
+
+    <div class="card-header">
+
+        <div class="header-title">
+            🖥 Console Output
+        </div>
+
+        <div class="header-tools">
+
+            <button class="btn" id="clearConsoleBtn">Clear</button>
+            <button class="btn" id="consoleFullscreenBtn">⛶</button>
+
+        </div>
+
+    </div>
+
+    <div
+        class="console"
+        id="console">
+
+        <div class="console-line info">
+            Java Studio Console
+        </div>
+
+        <div class="console-line">
+            Ready.
+        </div>
+
+        <div class="console-line">
+            <span class="console-prompt">➜</span>
+            Press Run Code or Ctrl + Enter.
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- EXAMPLES -->
+
+<div class="card">
+
+    <div class="card-header">
+
+        <div class="header-title">
+            📚 Java Examples
+        </div>
+
+    </div>
+
+
+    <div class="examples">
+
+        <button
+            class="example"
+            data-example="hello">
+
+            <strong>Hello World</strong>
+
+            <small>
+                Basic Java program
+            </small>
+
+        </button>
+
+
+        <button
+            class="example"
+            data-example="variables">
+
+            <strong>Variables</strong>
+
+            <small>
+                String, int, double and boolean
+            </small>
+
+        </button>
+
+
+        <button
+            class="example"
+            data-example="loop">
+
+            <strong>For Loop</strong>
+
+            <small>
+                Print numbers with a loop
+            </small>
+
+        </button>
+
+
+        <button
+            class="example"
+            data-example="condition">
+
+            <strong>If / Else</strong>
+
+            <small>
+                Conditional statements
+            </small>
+
+        </button>
+
+
+        <button
+            class="example"
+            data-example="calculator">
+
+            <strong>Calculator</strong>
+
+            <small>
+                Basic arithmetic
+            </small>
+
+        </button>
+
+
+        <button
+            class="example"
+            data-example="array">
+
+            <strong>Array</strong>
+
+            <small>
+                Integer array example
+            </small>
+
+        </button>
+
+
+        <button
+            class="example"
+            data-example="method">
+
+            <strong>Method</strong>
+
+            <small>
+                Java method example
+            </small>
+
+        </button>
+        <button class="example" data-example="scanner"><strong>Scanner Input</strong><small>Read user input</small></button>
+        <button class="example" data-example="switch"><strong>Switch</strong><small>Multi-way selection</small></button>
+        <button class="example" data-example="trycatch"><strong>Try / Catch</strong><small>Exception handling structure</small></button>
+        <button class="example" data-example="class"><strong>Class & Object</strong><small>Object-oriented Java starter</small></button>
+
+    </div>
+
+</div>
+
+</section>
+
+</main>
+
+
+<footer>
+<div class="footer-content">
+<div class="footer-top"><span>© 2026 Java Studio Pro</span>
+<div class="footer-actions">
+<button class="btn" id="footerAboutBtn">About Website</button>
+<button class="btn" id="footerPrivacyBtn">Privacy</button>
+<button class="btn" id="footerShortcutsBtn">Shortcuts</button>
+</div></div>
+<div class="footer-details">
+<article><h3>About Java Studio Pro</h3>
+<p>Java Studio Pro is a browser-based Java learning and code-playground interface designed around the original editor, console, examples, save, theme, formatting, keyboard shortcuts and fullscreen workflow. The page is intentionally self-contained so the core interface can be opened as a single HTML file.</p>
+<p>The editor keeps code in your browser's local storage, provides line numbers, code formatting, example loading, copying and Java-file download, and offers a lightweight browser-side simulator for the Java constructs supported by this playground. It is intended for learning, experimenting and practicing Java syntax rather than replacing a full Java compiler or IDE.</p>
+<p>Use the Tools menu to explore Find/Replace, word wrap, comment toggling, line duplication, indentation, statistics, console export, keyboard shortcuts and auto-save controls. The workspace is responsive and the editor and console can be expanded independently for focused work.</p></article>
+<article><h3>Privacy Information</h3>
+<p>Java Studio Pro is designed so that the code you type can remain in your browser through local storage. This page does not require an account for its core editor features. Saved editor content, theme preference, font preference and related workspace preferences are stored locally by the browser when those features are enabled.</p>
+<p>Because browser storage is controlled by the browser and device, clearing site data, using a private browsing session or changing browser storage settings can remove locally saved information. Do not treat browser storage as a backup system for important source code. Download important Java files when you need a durable copy.</p>
+<p>The built-in simulator is not a secure Java server and should not be used to process confidential information. Avoid placing passwords, API keys, private credentials or other sensitive data into sample code. The privacy details shown here describe this standalone page's intended behavior and should be reviewed if the code is modified or deployed with external services.____
+
+Contact us:
+Website: Java Studio Pro.ARnc
+Privacy / Support Email: subham99209114@gmail.com
+Contact no: 7544095688</p></article>
+</div>
+<details style="margin-top:16px"><summary style="cursor:pointer;color:var(--text);font-weight:800">Read the full website and privacy information</summary>
+<div id="longAboutPrivacy" style="margin-top:14px"><h3>Website Information</h3><p id="aboutLongText"></p><h3>Privacy Information</h3><p id="privacyLongText"></p></div>
+</details>
+</div>
+</footer>
+
+</div>
+
+
+<script>
+/* ================= JAVA STUDIO PRO - STABLE ENGINE ================= */
+const DEFAULT_CODE = `public class Main {\n    public static void main(String[] args) {\n        System.out.println("Hello, Java!");\n        System.out.println("Welcome to Java Studio.");\n    }\n}`;
+const EXAMPLES = {
+ hello:`public class Main {\n    public static void main(String[] args) {\n        System.out.println("Hello World!");\n        System.out.println("Java is running successfully.");\n    }\n}`,
+ variables:`public class Main {\n    public static void main(String[] args) {\n        String name = "Java Developer";\n        int age = 18;\n        double score = 95.5;\n        boolean active = true;\n        System.out.println("Name: " + name);\n        System.out.println("Age: " + age);\n        System.out.println("Score: " + score);\n        System.out.println("Active: " + active);\n    }\n}`,
+ loop:`public class Main {\n    public static void main(String[] args) {\n        for (int i = 1; i <= 10; i++) {\n            System.out.println("Number: " + i);\n        }\n    }\n}`,
+ condition:`public class Main {\n    public static void main(String[] args) {\n        int marks = 85;\n        if (marks >= 90) {\n            System.out.println("Grade A+");\n        } else if (marks >= 75) {\n            System.out.println("Grade A");\n        } else {\n            System.out.println("Keep learning!");\n        }\n    }\n}`,
+ calculator:`public class Main {\n    public static void main(String[] args) {\n        int a = 25;\n        int b = 10;\n        System.out.println("Addition: " + (a + b));\n        System.out.println("Subtraction: " + (a - b));\n        System.out.println("Multiplication: " + (a * b));\n        System.out.println("Division: " + (a / b));\n        System.out.println("Remainder: " + (a % b));\n    }\n}`,
+ array:`public class Main {\n    public static void main(String[] args) {\n        int[] numbers = {10, 20, 30, 40, 50};\n        for (int number : numbers) {\n            System.out.println(number);\n        }\n    }\n}`,
+ method:`public class Main {\n    static int add(int a, int b) { return a + b; }\n    public static void main(String[] args) {\n        int result = add(10, 20);\n        System.out.println("Result: " + result);\n    }\n}`,
+ scanner:`import java.util.Scanner;\npublic class Main {\n    public static void main(String[] args) {\n        Scanner scanner = new Scanner(System.in);\n        System.out.println("Enter your name:");\n        String name = scanner.nextLine();\n        System.out.println("Hello, " + name);\n        scanner.close();\n    }\n}`,
+ switch:`public class Main {\n    public static void main(String[] args) {\n        int day = 2;\n        switch(day) {\n            case 1: System.out.println("Monday"); break;\n            case 2: System.out.println("Tuesday"); break;\n            default: System.out.println("Other day");\n        }\n    }\n}`,
+ trycatch:`public class Main {\n    public static void main(String[] args) {\n        try {\n            int result = 10 / 0;\n            System.out.println(result);\n        } catch (ArithmeticException error) {\n            System.out.println("Handled: " + error.getMessage());\n        }\n    }\n}`,
+ class:`class Person {\n    String name;\n    Person(String name) { this.name = name; }\n    void greet() { System.out.println("Hello " + name); }\n}\npublic class Main {\n    public static void main(String[] args) {\n        Person person = new Person("Java Developer");\n        person.greet();\n    }\n}`
+};
+const editor=document.getElementById('codeInput'), lineNumbers=document.getElementById('lineNumbers'), consoleBox=document.getElementById('console'), editorCard=document.getElementById('editorCard'), fontSize=document.getElementById('fontSize');
+const STORAGE_KEY='javaStudioProCode', THEME_KEY='javaStudioProTheme';
+let autoSaveEnabled=localStorage.getItem('javaStudioAutoSave')!=='0';
+let runHistory=JSON.parse(localStorage.getItem('javaStudioRunHistory')||'[]');
+let fileDisplayName=localStorage.getItem('javaStudioFileName')||'Main.java';
+const lineCountEl=document.getElementById('lineCount'), charCountEl=document.getElementById('charCount'), wordCountEl=document.getElementById('wordCount');
+document.getElementById('fileName').textContent=fileDisplayName;
+document.getElementById('autoSaveBtn').textContent='💾 Auto Save: '+(autoSaveEnabled?'ON':'OFF');
+
+function updateLineNumbers(){const n=Math.max(1,editor.value.split('\n').length);lineNumbers.innerHTML=Array.from({length:n},(_,i)=>i+1).join('<br>');lineNumbers.scrollTop=editor.scrollTop;updateStats();}
+function updateStats(){const v=editor.value;lineCountEl.textContent=v?v.split('\n').length:0;charCountEl.textContent=v.length;wordCountEl.textContent=v.trim()?v.trim().split(/\s+/).length:0;}
+function showConsole(message,type=''){const d=document.createElement('div');d.className='console-line '+type;d.textContent=String(message);consoleBox.appendChild(d);consoleBox.scrollTop=consoleBox.scrollHeight;}
+function clearConsole(){consoleBox.innerHTML='<div class="console-line info">Console cleared.</div>';}
+function saveLocal(){if(autoSaveEnabled)localStorage.setItem(STORAGE_KEY,editor.value);}
+function copyCode(){navigator.clipboard?.writeText(editor.value).then(()=>showConsole('Code copied to clipboard.','success')).catch(()=>{editor.select();document.execCommand('copy');showConsole('Code copied.','success');});}
+function clearEditor(){if(editor.value.trim()&&!confirm('Clear the entire editor?'))return;editor.value='';editor.dispatchEvent(new Event('input'));}
+function resetCode(){if(editor.value.trim()&&!confirm('Reset code to the default example?'))return;editor.value=DEFAULT_CODE;editor.dispatchEvent(new Event('input'));clearConsole();}
+function newFile(){if(!confirm('Create a new Java file?'))return;editor.value='public class Main {\n    public static void main(String[] args) {\n        \n    }\n}';editor.dispatchEvent(new Event('input'));clearConsole();}
+function saveFile(){const blob=new Blob([editor.value],{type:'text/plain;charset=utf-8'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=fileDisplayName;a.click();setTimeout(()=>URL.revokeObjectURL(url),500);showConsole(fileDisplayName+' downloaded.','success');}
+function insertIndent(){const s=editor.selectionStart,e=editor.selectionEnd;editor.setRangeText('    ',s,e,'end');editor.dispatchEvent(new Event('input'));}
+function changeFontSize(){const size=fontSize.value;editor.style.fontSize=size+'px';lineNumbers.style.fontSize=size+'px';localStorage.setItem('javaStudioFontSize',size);}
+function toggleTheme(){const light=document.body.classList.toggle('light');localStorage.setItem(THEME_KEY,light?'light':'dark');document.getElementById('themeBtn').textContent=light?'🌙':'☀️';}
+function toggleFullscreen(){if(!document.fullscreenElement){editorCard.requestFullscreen?.().catch(()=>editorCard.classList.add('fullscreen-editor'));}else document.exitFullscreen?.();}
+function formatCode(){let indent=0;const out=[];for(const raw of editor.value.split('\n')){const line=raw.trim();if(!line){out.push('');continue;}if(line.startsWith('}'))indent=Math.max(0,indent-1);out.push('    '.repeat(indent)+line);if(line.endsWith('{')&&!line.startsWith('//'))indent++;}editor.value=out.join('\n');editor.dispatchEvent(new Event('input'));showConsole('Code formatted.','success');}
+function selectedLineRange(){const s=editor.selectionStart,e=editor.selectionEnd,a=editor.value.lastIndexOf('\n',s-1)+1;let b=editor.value.indexOf('\n',e);if(b<0)b=editor.value.length;return{lineStart:a,lineEnd:b};}
+function changeIndent(delta){const {lineStart,lineEnd}=selectedLineRange(),chunk=editor.value.slice(lineStart,lineEnd);const changed=chunk.split('\n').map(x=>delta>0?'    '+x:x.replace(/^ {1,4}/,'')).join('\n');editor.setRangeText(changed,lineStart,lineEnd,'select');editor.dispatchEvent(new Event('input'));}
+function openModal(title,body,buttons=''){const w=document.createElement('div');w.className='modal-backdrop open';w.innerHTML=`<div class="modal"><div class="modal-header"><h2>${title}</h2><button class="btn modal-close">✕</button></div>${body}${buttons?`<div class="modal-actions">${buttons}</div>`:''}</div>`;document.body.appendChild(w);w.querySelector('.modal-close').onclick=()=>w.remove();w.onclick=e=>{if(e.target===w)w.remove()};return w;}
+
+function escapeHTML(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+function findReplace(){const body='<div class="modal-grid"><label>Find<input id="findText" placeholder="Text to find"></label><label>Replace with<input id="replaceText" placeholder="Replacement"></label></div><p>Find, replace one occurrence, or replace all exact matches.</p>';const m=openModal('Find / Replace',body,'<button class="btn" id="findNext">Find Next</button><button class="btn" id="replaceOne">Replace</button><button class="run-btn" id="replaceAll">Replace All</button>');const f=m.querySelector('#findText'),r=m.querySelector('#replaceText');m.querySelector('#findNext').onclick=()=>{const q=f.value;if(!q)return;let p=editor.value.indexOf(q,editor.selectionEnd);if(p<0)p=editor.value.indexOf(q);if(p>=0){editor.focus();editor.setSelectionRange(p,p+q.length)}else showConsole('Text not found.','warning')};m.querySelector('#replaceOne').onclick=()=>{const q=f.value;if(!q)return;const s=editor.selectionStart,e=editor.selectionEnd;if(editor.value.slice(s,e)===q){editor.setRangeText(r.value,s,e,'end');editor.dispatchEvent(new Event('input'));}else m.querySelector('#findNext').click()};m.querySelector('#replaceAll').onclick=()=>{const q=f.value;if(!q)return;const count=(editor.value.split(q).length-1);editor.value=editor.value.split(q).join(r.value);editor.dispatchEvent(new Event('input'));showConsole(`Replaced ${count} occurrence(s).`,'success')};f.focus();}
+function toggleComment(){const {lineStart,lineEnd}=selectedLineRange(),chunk=editor.value.slice(lineStart,lineEnd),lines=chunk.split('\n'),uncomment=lines.every(x=>!x.trim()||x.trim().startsWith('//'));const changed=lines.map(x=>uncomment?x.replace(/^(\s*)\/\/ ?/,'$1'):x.trim()?x.replace(/^(\s*)/,'$1// '):x).join('\n');editor.setRangeText(changed,lineStart,lineEnd,'select');editor.dispatchEvent(new Event('input'));}
+function duplicateLine(){const {lineStart,lineEnd}=selectedLineRange(),line=editor.value.slice(lineStart,lineEnd);editor.setRangeText(line+'\n'+line,lineStart,lineEnd,'end');editor.dispatchEvent(new Event('input'));}
+
+function stripComments(s){return s.replace(/\/\/.*$/gm,'');}
+function validateJava(code){if(!/\bclass\s+Main\b/.test(code))return{ok:false,message:'Compilation error: class Main not found.'};if(!/public\s+static\s+void\s+main\s*\(\s*String\s*\[\]\s+args\s*\)/.test(code))return{ok:false,message:'Compilation error: public static void main(String[] args) not found.'};let depth=0,quote=null,esc=false;for(const c of code){if(quote){if(c===quote&&!esc)quote=null;esc=c==='\\'&&!esc;continue;}if(c==='"'||c==="'"){quote=c;esc=false;}else if(c==='{')depth++;else if(c==='}')depth--;if(depth<0)return{ok:false,message:'Compilation error: unexpected } brace.'};}if(depth!==0)return{ok:false,message:'Compilation error: unmatched { or } braces.'};return{ok:true};}
+
+function splitTopLevel(text,delimiter='+'){const out=[],starts=[];let cur='',depth=0,quote=null,esc=false;for(let i=0;i<text.length;i++){const c=text[i];if(quote){cur+=c;if(c===quote&&!esc)quote=null;esc=c==='\\'&&!esc;continue;}if(c==='"'||c==="'"){quote=c;esc=false;cur+=c;continue;}if(c==='('||c==='['||c==='{'){depth++;cur+=c;continue;}if(c===')'||c===']'||c==='}'){depth--;cur+=c;continue;}if(c===delimiter&&depth===0){if(delimiter==='+'&&(text[i+1]==='+'||text[i-1]==='+')){cur+=c;continue;}if(cur.trim()){out.push(cur.trim());cur='';continue;}}cur+=c;}if(cur.trim()||!out.length)out.push(cur.trim());return out;}
+function splitArgs(text){return splitTopLevel(text,',');}
+function hasOuterParens(s){if(!s.startsWith('(')||!s.endsWith(')'))return false;let d=0,q=null,e=false;for(let i=0;i<s.length;i++){const c=s[i];if(q){if(c===q&&!e)q=null;e=c==='\\'&&!e;continue;}if(c==='"'||c==="'"){q=c;e=false;}else if(c==='(')d++;else if(c===')')d--;if(d===0&&i<s.length-1)return false;}return d===0;}
+function unescapeJavaString(s){return s.replace(/\\n/g,'\n').replace(/\\t/g,'\t').replace(/\\r/g,'\r').replace(/\\"/g,'"').replace(/\\\\/g,'\\');}
+
+function mathFunction(name,args){const f={sqrt:Math.sqrt,abs:Math.abs,pow:Math.pow,max:Math.max,min:Math.min,round:Math.round,floor:Math.floor,ceil:Math.ceil,sin:Math.sin,cos:Math.cos,tan:Math.tan,asin:Math.asin,acos:Math.acos,atan:Math.atan,log:Math.log,log10:Math.log10,exp:Math.exp,cbrt:Math.cbrt}[name];if(!f)throw new Error('Unsupported Math function: '+name);return f(...args);}
+function tokenizeMath(s){const t=[];let i=0;while(i<s.length){if(/\s/.test(s[i])){i++;continue;}if('()+-*/%^,'.includes(s[i])){t.push(s[i++]);continue;}const m=s.slice(i).match(/^(?:\d+(?:\.\d*)?|\.\d+)(?:[eE][+-]?\d+)?/);if(m){t.push(m[0]);i+=m[0].length;continue;}const id=s.slice(i).match(/^[A-Za-z_$][\w$]*(?:\.[A-Za-z_$][\w$]*)?/);if(id){t.push(id[0]);i+=id[0].length;continue;}throw new Error('Invalid character in expression');}return t;}
+function numericExpression(text,vars,stack=new Set()){
+ const t=tokenizeMath(text);let p=0;
+ const peek=()=>t[p],take=()=>t[p++];
+ function primary(){const x=take();if(x===undefined)throw Error('Unexpected end');if(x==='('){const v=addSub();if(take()!==')')throw Error('Missing )');return v;}if(x==='+'||x==='-'){const v=primary();return x==='-'?-v:v;}if(/^\d|^\.\d/.test(x))return Number(x);if(x==='Math.PI'||x==='PI')return Math.PI;if(x==='Math.E'||x==='E')return Math.E;if(x.startsWith('Math.')&&peek()==='('){const name=x.slice(5);take();const args=[];if(peek()!==')'){do{args.push(addSub());}while(peek()===','&&take());}if(take()!==')')throw Error('Missing )');return mathFunction(name,args);}if(/^[A-Za-z_$][\w$]*$/.test(x)){if(Object.prototype.hasOwnProperty.call(vars,x)){if(stack.has(x))throw Error('Circular variable');const ns=new Set(stack);ns.add(x);return Number(evaluateExpression(vars[x],vars,ns));}throw Error('Unknown variable '+x);}throw Error('Unknown token '+x);}
+ function power(){let v=primary();while(peek()==='^'){take();v=Math.pow(v,power());}return v;}
+ function mul(){let v=power();while(['*','/','%'].includes(peek())){const o=take(),r=power();if(o==='*')v*=r;else if(o==='/')v/=r;else v%=r;}return v;}
+ function addSub(){let v=mul();while(peek()==='+'||peek()==='-'){const o=take(),r=mul();v=o==='+'?v+r:v-r;}return v;}
+ const result=addSub();if(p!==t.length)throw Error('Invalid expression');return result;
+}
+function evaluateSimple(expr,vars,stack=new Set()){
+ let s=expr.trim();while(hasOuterParens(s))s=s.slice(1,-1).trim();
+ if(/^"[\s\S]*"$/.test(s))return unescapeJavaString(s.slice(1,-1));
+ if(/^'.*'$/.test(s))return s.slice(1,-1);
+ if(s==='true'||s==='false')return s;
+ if(Object.prototype.hasOwnProperty.call(vars,s)){if(stack.has(s))return s;const ns=new Set(stack);ns.add(s);return evaluateExpression(vars[s],vars,ns);}
+ const mm=s.match(/^Math\.(\w+)\s*\((.*)\)$/s);if(mm)return String(mathFunction(mm[1],splitArgs(mm[2]).map(x=>Number(evaluateSimple(x,vars,stack)))));
+ if(/^Math\.(PI|E)$/.test(s))return String(s.endsWith('PI')?Math.PI:Math.E);
+ try{if(/[+\-*/%^()]/.test(s)&&/\d|[A-Za-z_$]/.test(s))return String(numericExpression(s,vars,stack));}catch(e){return s;}
+ return s;
+}
+function evaluateExpression(expr,vars,stack=new Set()){
+ const parts=splitTopLevel(expr,'+');if(parts.length===1)return evaluateSimple(parts[0],vars,stack);let out='',stringMode=false;for(const part of parts){const raw=part.trim(),v=evaluateSimple(raw,vars,stack);const str=/^"[\s\S]*"$|^'.*'$/.test(raw);if(stringMode||str){stringMode=true;out+=String(v);}else if(Number.isFinite(Number(v))){out=out===''?String(v):String(Number(out)+Number(v));}else{stringMode=true;out+=String(v);}}return out;}
+
+function extractVariables(code){const vars={};const clean=stripComments(code);const re=/(?:String|char|int|double|float|boolean|long)\s+([A-Za-z_$][\w$]*)\s*=\s*([^;]+);/g;let m;while((m=re.exec(clean)))vars[m[1]]=m[2].trim();return vars;}
+function extractPrintStatements(code){const out=[];const re=/System\s*\.\s*out\s*\.\s*(println|print)\s*\(/g;let m;while((m=re.exec(code))){let i=re.lastIndex,depth=1,quote=null,esc=false;for(;i<code.length;i++){const c=code[i];if(quote){if(c===quote&&!esc)quote=null;esc=c==='\\'&&!esc;continue;}if(c==='"'||c==="'"){quote=c;esc=false;continue;}if(c==='(')depth++;else if(c===')'){depth--;if(depth===0)break;}}if(depth===0){out.push({type:m[1],expr:code.slice(re.lastIndex,i)});re.lastIndex=i+1;}}return out;}
+function simulateJava(code){const lines=[],vars=extractVariables(code),clean=stripComments(code);for(const item of extractPrintStatements(clean)){try{const v=evaluateExpression(item.expr.trim(),vars);if(item.type==='print'&&lines.length)lines[lines.length-1]+=v;else lines.push(v);}catch(e){lines.push('[Unable to evaluate expression: '+e.message+']');}}
+ const loopRe=/for\s*\(\s*int\s+(\w+)\s*=\s*(-?\d+)\s*;\s*\1\s*(<=|<)\s*(-?\d+)\s*;\s*\1\+\+\s*\)\s*\{([\s\S]*?)\}/g;let lm;while((lm=loopRe.exec(clean))){const start=+lm[2],end=+lm[4],inclusive=lm[3]==='<=',body=lm[5],br=new RegExp('System\\s*\\.\\s*out\\s*\\.\\s*println\\s*\\(([^;]*?)\\)\\s*;','g');for(let i=start;inclusive?i<=end:i<end;i++){let bm;while((bm=br.exec(body))){const local={...vars,[lm[1]]:String(i)};try{lines.push(evaluateExpression(bm[1],local));}catch(e){lines.push('[Unable to evaluate expression]');}}br.lastIndex=0;}}
+ return {lines};}
+function runCode(){const code=editor.value.trim();clearConsole();if(!code){showConsole('No Java code found.','error');return;}showConsole('Compiling Main.java...','info');setTimeout(()=>{const v=validateJava(code);if(!v.ok){showConsole(v.message,'error');return;}showConsole('Build successful.','success');const result=simulateJava(code);showConsole('Program output:','info');if(!result.lines.length)showConsole('(Program produced no console output.)','warning');else result.lines.forEach(x=>showConsole(x,'output'));showConsole('Process finished successfully.','success');},250);const stamp=new Date().toLocaleString();runHistory.unshift(stamp+' • '+code.split('\n')[0].slice(0,80));runHistory=runHistory.slice(0,20);localStorage.setItem('javaStudioRunHistory',JSON.stringify(runHistory));}
+
+function loadExample(name){if(!EXAMPLES[name])return;editor.value=EXAMPLES[name];editor.dispatchEvent(new Event('input'));showConsole('Example loaded: '+name,'success');}
+function renameFile(){const n=prompt('Java file name:',fileDisplayName);if(!n)return;fileDisplayName=n.replace(/\.java$/i,'')+'.java';document.getElementById('fileName').textContent=fileDisplayName;localStorage.setItem('javaStudioFileName',fileDisplayName);}
+function showHistory(){const items=runHistory.length?runHistory.map((x,i)=>`<div style="padding:10px;border-bottom:1px solid var(--border)"><b>Run ${runHistory.length-i}</b><small style="display:block;color:var(--muted);margin-top:3px">${escapeHTML(x)}</small></div>`).join(''):'<p>No runs recorded yet.</p>';const m=openModal('Run History',items,'<button class="btn" id="clearHistory">Clear History</button>');m.querySelector('#clearHistory').onclick=()=>{runHistory=[];localStorage.removeItem('javaStudioRunHistory');m.remove();showConsole('Run history cleared.','success');};}
+function downloadConsole(){const blob=new Blob([consoleBox.innerText],{type:'text/plain;charset=utf-8'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='java-console-output.txt';a.click();setTimeout(()=>URL.revokeObjectURL(url),500);}
+function showStats(){updateStats();openModal('Code Statistics',`<div class="modal-grid"><div><b>Lines</b><p>${lineCountEl.textContent}</p></div><div><b>Characters</b><p>${charCountEl.textContent}</p></div><div><b>Words</b><p>${wordCountEl.textContent}</p></div><div><b>Java file</b><p>${escapeHTML(fileDisplayName)}</p></div></div>`);}
+function showShortcuts(){openModal('Keyboard Shortcuts','<table class="help-table"><tr><th>Shortcut</th><th>Action</th></tr><tr><td>Ctrl / Cmd + Enter</td><td>Run code</td></tr><tr><td>Ctrl / Cmd + S</td><td>Download Java file</td></tr><tr><td>Ctrl / Cmd + F</td><td>Find / Replace</td></tr><tr><td>Tab</td><td>Insert four spaces</td></tr><tr><td>Shift + Tab</td><td>Unindent selection</td></tr><tr><td>Esc</td><td>Close dialog</td></tr></table>');}
+
+// Initialization
+const LIVE_PREVIEW_KEY='javaStudioLivePreview';let livePreviewEnabled=localStorage.getItem(LIVE_PREVIEW_KEY)!=='0';const livePreviewBtn=document.getElementById('livePreviewBtn');function updateLivePreviewButton(){livePreviewBtn.textContent='⚡ Live Preview: '+(livePreviewEnabled?'ON':'OFF');livePreviewBtn.setAttribute('aria-pressed',String(livePreviewEnabled));livePreviewBtn.title=livePreviewEnabled?'Preview updates automatically while typing':'Preview updates only when Run Code is clicked';}function toggleLivePreview(){livePreviewEnabled=!livePreviewEnabled;localStorage.setItem(LIVE_PREVIEW_KEY,livePreviewEnabled?'1':'0');updateLivePreviewButton();if(livePreviewEnabled)runCode();}updateLivePreviewButton();
+const savedCode=localStorage.getItem(STORAGE_KEY);if(savedCode!==null)editor.value=savedCode;else editor.value=DEFAULT_CODE;if(localStorage.getItem(THEME_KEY)==='light'){document.body.classList.add('light');document.getElementById('themeBtn').textContent='🌙';}const savedFont=localStorage.getItem('javaStudioFontSize');if(savedFont){fontSize.value=savedFont;changeFontSize();}updateLineNumbers();
+let livePreviewTimer=null;editor.addEventListener('input',()=>{updateLineNumbers();saveLocal();if(livePreviewEnabled){clearTimeout(livePreviewTimer);livePreviewTimer=setTimeout(()=>runCode(),350);}});editor.addEventListener('scroll',()=>lineNumbers.scrollTop=editor.scrollTop);editor.addEventListener('keydown',e=>{if(e.key==='Tab'){e.preventDefault();if(e.shiftKey)changeIndent(-1);else insertIndent();}if((e.ctrlKey||e.metaKey)&&e.key==='Enter'){e.preventDefault();runCode();}if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='s'){e.preventDefault();saveFile();}if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='f'){e.preventDefault();findReplace();}if(e.key==='Escape')document.querySelectorAll('.modal-backdrop').forEach(x=>x.remove());});
+
+document.getElementById('runBtn').onclick=runCode;document.getElementById('livePreviewBtn').onclick=toggleLivePreview;document.getElementById('copyBtn').onclick=copyCode;document.getElementById('resetBtn').onclick=resetCode;document.getElementById('newBtn').onclick=newFile;document.getElementById('saveBtn').onclick=saveFile;document.getElementById('themeBtn').onclick=toggleTheme;document.getElementById('clearEditorBtn').onclick=clearEditor;document.getElementById('clearConsoleBtn').onclick=clearConsole;document.getElementById('formatBtn').onclick=formatCode;document.getElementById('tabBtn').onclick=insertIndent;document.getElementById('fullscreenBtn').onclick=toggleFullscreen;document.getElementById('renameBtn').onclick=renameFile;fontSize.onchange=changeFontSize;
+document.querySelectorAll('.example').forEach(b=>b.onclick=()=>loadExample(b.dataset.example));
+document.getElementById('featuresBtn').onclick=e=>{e.stopPropagation();document.getElementById('featurePanel').classList.toggle('open');};document.addEventListener('click',e=>{if(!e.target.closest('.feature-menu'))document.getElementById('featurePanel').classList.remove('open');});
+document.getElementById('findBtn').onclick=findReplace;document.getElementById('wrapBtn').onclick=()=>{editor.classList.toggle('wrap');showConsole('Word wrap '+(editor.classList.contains('wrap')?'enabled.':'disabled.'),'success');};document.getElementById('commentBtn').onclick=toggleComment;document.getElementById('duplicateBtn').onclick=duplicateLine;document.getElementById('indentBtn').onclick=()=>changeIndent(1);document.getElementById('unindentBtn').onclick=()=>changeIndent(-1);document.getElementById('statsBtn').onclick=showStats;document.getElementById('shortcutsBtn').onclick=showShortcuts;document.getElementById('downloadConsoleBtn').onclick=downloadConsole;document.getElementById('autoSaveBtn').onclick=()=>{autoSaveEnabled=!autoSaveEnabled;localStorage.setItem('javaStudioAutoSave',autoSaveEnabled?'1':'0');document.getElementById('autoSaveBtn').textContent='💾 Auto Save: '+(autoSaveEnabled?'ON':'OFF');if(autoSaveEnabled)saveLocal();};
+document.getElementById('consoleFullscreenBtn').onclick=()=>{if(!document.fullscreenElement)consoleBox.requestFullscreen?.();else document.exitFullscreen?.();};document.addEventListener('fullscreenchange',()=>{if(!document.fullscreenElement){editorCard.classList.remove('fullscreen-editor');consoleBox.classList.remove('fullscreen-console');}});
+document.getElementById('historyBtn').onclick=showHistory;document.getElementById('footerAboutBtn').onclick=()=>document.querySelector('footer details').open=true;const footerDetails=document.querySelector('footer details'); const privacyText=`Privacy Information — Java Studio Pro is designed as a standalone browser page. Its core editor does not require an account. Code, theme, font size, file name, auto-save settings and related preferences may be stored locally in the browser when those features are enabled. Browser localStorage is controlled by the browser and website origin, so clearing site data or using private browsing can remove locally saved information. Browser storage is not a guaranteed backup; download important Java files when needed. The built-in Java simulator runs in the browser and is not a full Java compiler or server. Do not enter passwords, API keys, private credentials or confidential information into the playground. Downloaded files are handled by your browser and stored on your device. If this page is later connected to analytics, advertising, cloud synchronization, external APIs, authentication or remote compilation, this privacy information should be updated accordingly. This information describes the intended behavior of this standalone version and is not legal advice.`; const aboutText=`Website Information — Java Studio Pro is a single-page browser-based Java learning and code playground. It provides a code editor, examples, console, formatting, save/download, theme controls, keyboard shortcuts, fullscreen tools, math simulation and Live Preview. The core editor works in the browser and is intended for learning, experimenting and practicing Java syntax. It is not a replacement for a complete Java compiler or IDE.`; document.getElementById('aboutLongText').textContent=aboutText; document.getElementById('privacyLongText').textContent=privacyText; document.getElementById('footerAboutBtn').onclick=()=>{footerDetails.open=true;document.getElementById('aboutLongText').scrollIntoView({behavior:'smooth',block:'center'});}; document.getElementById('footerPrivacyBtn').onclick=()=>{footerDetails.open=true;document.getElementById('privacyLongText').scrollIntoView({behavior:'smooth',block:'center'});}; document.getElementById('footerShortcutsBtn').onclick=showShortcuts;
+window.addEventListener('beforeunload',()=>localStorage.setItem(STORAGE_KEY,editor.value));
+
+</script>
+</body>
+</html>
